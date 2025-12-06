@@ -36,59 +36,6 @@ export default function HomePage() {
 
   const handleDataImported = (data: string) => {
     setImportedData(data)
-
-    // Simular la carga de datos
-    setTimeout(() => {
-      // Simular datos del Google Sheet
-      const addresses = [
-        "PUENTE ALTO, CAMILO HENRIQUEZ 1234",
-        "PUENTE ALTO, CERRO PLOMO 414 CASA",
-        "PUENTE ALTO, COQUIMBO 346",
-        "PUENTE ALTO, COQUIMBO 1951",
-        "PUENTE ALTO, EL HUALLE 2393",
-        "PUENTE ALTO, EL TIMBAL 01753 PU",
-        "PUENTE ALTO, GENARO PRIETO 1035",
-        "PUENTE ALTO, JARDIN ALTO 1881 1881 VILLA ARCO IRIS",
-        "PUENTE ALTO, LEONARDO DA VINCI 992 CASA",
-        "PUENTE ALTO, LOS SICOMOROS 2328",
-        "PUENTE ALTO, NONATO COO 2466",
-        "PUENTE ALTO, PJE. SARMIENTO 0549 VILLA LA PRIMAVERA",
-        "PUENTE ALTO, TENIENTE BELLO 414 LUIS MATTE",
-        "PUENTE ALTO, TOME 646 DPTO 23",
-        "PUENTE ALTO, TOSCANINI 01461 DPTO 36",
-        "PUENTE ALTO, TRENTO SUR 428 CASA",
-        "PUENTE ALTO, VERDE 1843",
-        "SAN JOAQUIN, SEBASTOPOL 324 CASA",
-        "SAN RAMON, ELIAS FERNANDEZ ALBANO 8163 8163 8163",
-        "SAN RAMON, EMILIANO FIGUEROA 8530",
-        "SAN RAMON, LO CANAS 8522 CASA",
-        "SAN RAMON, VOLCAN 8595 CASA",
-        "LA GRANJA, AV. CARDENAL RAUL SILVA HENRIQUEZ 9251 9251 9251",
-      ]
-
-      const extractCommune = (address: string): string => {
-        if (address.startsWith("PUENTE ALTO")) return "PUENTE ALTO"
-        if (address.startsWith("SAN RAMON")) return "SAN RAMON"
-        if (address.startsWith("LA GRANJA")) return "LA GRANJA"
-        if (address.startsWith("SAN JOAQUIN")) return "SAN JOAQUIN"
-        return "SANTIAGO" // Default
-      }
-
-      const newDeliveries = addresses.map((address, index) => {
-        const commune = extractCommune(address)
-        return {
-          id: index + 1,
-          address,
-          commune,
-          status: index < 3 ? "completed" : "pending",
-          position: { top: "0%", left: "0%" },
-          distance: Math.round((Math.random() * 5 + 1) * 10) / 10, // Distancia aleatoria entre 1 y 6 km
-          estimatedTime: `${Math.floor(Math.random() * 15 + 5)}min`, // Tiempo aleatorio entre 5 y 20 min
-        }
-      })
-
-      setDeliveries(newDeliveries)
-    }, 1000)
   }
 
   const handleRouteOptimized = (optimizationType: OptimizationType, options: RouteOptimizationOptions) => {

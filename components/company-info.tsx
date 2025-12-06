@@ -62,11 +62,9 @@ export function CompanyInfo() {
             "Protocolos de seguridad de primer nivel y estudios de rutas críticas.",
             "Seguros de carga ante eventuales siniestros.",
             "Realizamos servicios con flexibilidad horaria y agilidad operacional.",
-            "Atención personalizada en línea 24/7.",
-            "Experiencia para realizar operaciones aeroportuarias y portuarias.",
-            "Entregamos un servicio integral de logística y fulfillment.",
-            "Personal altamente calificado y especializado.",
-            "Protocolos de seguridad de primer nivel y estudios de rutas críticas.",
+            "Flota moderna con tecnología de rastreo GPS.",
+            "Compromiso con la distribución ecológica.",
+            "Más de 10 años de experiencia en el mercado.",
           ].map((feature, index) => (
             <div key={index} className="flex items-start">
               <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />

@@ -82,6 +82,7 @@ export function MapContainer({
     index: number,
     total: number,
     commune: string,
+    currentDeliveries: Delivery[] = [],
     optimizationType: OptimizationType = "distance",
     returnToDepot = true,
     communeWeighting = 50,
@@ -106,7 +107,7 @@ export function MapContainer({
 
       // Para 'commune-radius', organizamos en círculo dentro de cada comuna
       if (optimizationType === "commune-radius") {
-        const communeDeliveries = deliveries.filter((d) => d.commune === commune)
+        const communeDeliveries = currentDeliveries.filter((d) => d.commune === commune)
         const communeIndex = communeDeliveries.findIndex((d) => d.id === index + 1)
         const communeTotal = communeDeliveries.length
 
@@ -204,10 +205,15 @@ export function MapContainer({
               address,
               commune,
               status: index < 3 ? "completed" : "pending",
-              position: generatePosition(index, addresses.length, commune),
+              position: { top: "0%", left: "0%" }, // Posición temporal
               distance: Math.round((Math.random() * 5 + 1) * 10) / 10, // Distancia aleatoria entre 1 y 6 km
               estimatedTime: `${Math.floor(Math.random() * 15 + 5)}min`, // Tiempo aleatorio entre 5 y 20 min
             }
+          })
+
+          // Actualizar posiciones después de crear las entregas
+          newDeliveries.forEach((delivery, index) => {
+            delivery.position = generatePosition(index, addresses.length, delivery.commune, newDeliveries)
           })
 
           setDeliveries(newDeliveries)
@@ -244,7 +250,7 @@ export function MapContainer({
 
   // Actualizar cuando cambian las entregas externas
   useEffect(() => {
-    if (externalDeliveries.length > 0) {
+    if (externalDeliveries.length > 0 && !importedData) {
       setDeliveries(externalDeliveries)
       setHasDirections(true)
 
@@ -268,7 +274,7 @@ export function MapContainer({
         optimizationType: optimizationConfig?.type === "manual" ? "Orden manual" : "Sin optimizar",
       })
     }
-  }, [externalDeliveries])
+  }, [externalDeliveries, importedData, optimizationConfig])
 
   // Optimizar la ruta cuando cambia la configuración de optimización
   useEffect(() => {

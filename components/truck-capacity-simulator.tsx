@@ -254,25 +254,33 @@ export function TruckCapacitySimulator() {
 
   // Cargar un producto al camión
   const loadProduct = (product: Product) => {
+    if (!product || product.quantity <= 0) {
+      alert("Producto no disponible")
+      return
+    }
+
     // Verificar si hay capacidad
     const newWeight = currentWeight + product.weight
     const newVolume = currentVolume + calculateVolume(product)
 
     if (newWeight > truck.maxWeight) {
-      alert("¡Excede el peso máximo del camión!")
+      alert(`¡Excede el peso máximo del camión! (${newWeight.toFixed(1)}kg > ${truck.maxWeight}kg)`)
       return
     }
 
     if (newVolume > truck.volumeCapacity) {
-      alert("¡Excede el volumen máximo del camión!")
+      alert(`¡Excede el volumen máximo del camión! (${newVolume.toFixed(2)}m³ > ${truck.volumeCapacity}m³)`)
       return
     }
 
-    setLoadedProducts([...loadedProducts, product])
+    // Agregar el producto al camión
+    setLoadedProducts([...loadedProducts, { ...product }])
 
     // Reducir la cantidad disponible
     setProducts(
-      products.map((p) => (p.id === product.id ? { ...p, quantity: p.quantity - 1 } : p)).filter((p) => p.quantity > 0),
+      products
+        .map((p) => (p.id === product.id ? { ...p, quantity: p.quantity - 1 } : p))
+        .filter((p) => p.quantity > 0)
     )
   }
 
