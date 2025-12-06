@@ -38,6 +38,10 @@ export default function HomePage() {
     setImportedData(data)
   }
 
+  const handleDeliveriesGenerated = (generatedDeliveries: Delivery[]) => {
+    setDeliveries(generatedDeliveries)
+  }
+
   const handleRouteOptimized = (optimizationType: OptimizationType, options: RouteOptimizationOptions) => {
     setOptimizationConfig({ type: optimizationType, options })
     if (isMobile) {
@@ -134,6 +138,7 @@ export default function HomePage() {
               onDataImported={handleDataImported}
               onRouteOptimized={handleRouteOptimized}
               onDeliveriesReordered={handleDeliveriesReordered}
+              onDeliveriesGenerated={handleDeliveriesGenerated}
               deliveries={deliveries}
               communeColors={communeColors}
             />

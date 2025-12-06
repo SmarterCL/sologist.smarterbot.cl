@@ -19,6 +19,7 @@ interface ImportPanelProps {
   onDataImported: (data: string) => void
   onRouteOptimized: (optimizationType: OptimizationType, options: RouteOptimizationOptions) => void
   onDeliveriesReordered?: (deliveries: Delivery[]) => void
+  onDeliveriesGenerated?: (deliveries: Delivery[]) => void
   deliveries?: Delivery[]
   communeColors?: Record<string, string>
 }
@@ -27,6 +28,7 @@ export function ImportPanel({
   onDataImported,
   onRouteOptimized,
   onDeliveriesReordered,
+  onDeliveriesGenerated,
   deliveries = [],
   communeColors = {},
 }: ImportPanelProps) {
@@ -93,8 +95,13 @@ export function ImportPanel({
       })
 
       setSampleDeliveries(newDeliveries)
+      
+      // Notificar a page.tsx que se generaron las entregas
+      if (onDeliveriesGenerated) {
+        onDeliveriesGenerated(newDeliveries)
+      }
     }
-  }, [hasImportedData, sampleDeliveries.length, deliveries.length])
+  }, [hasImportedData, sampleDeliveries.length, deliveries.length, onDeliveriesGenerated])
 
   // Actualizar el estado cuando cambian las entregas externas
   useEffect(() => {

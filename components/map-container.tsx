@@ -160,97 +160,20 @@ export function MapContainer({
     }
   }
 
-  // Procesar los datos importados
+  // Procesar los datos importados - ahora simplemente marcamos como cargado
   useEffect(() => {
     if (importedData) {
       setIsProcessingData(true)
-
-      // Simular procesamiento de datos
+      // Las entregas ahora vienen de externalDeliveries
       setTimeout(() => {
-        try {
-          // Aquí procesaríamos los datos reales del Google Sheet
-          // Para esta demo, generaremos datos basados en el ejemplo proporcionado
-
-          // Simular datos del Google Sheet
-          const addresses = [
-            "PUENTE ALTO, CAMILO HENRIQUEZ 1234",
-            "PUENTE ALTO, CERRO PLOMO 414 CASA",
-            "PUENTE ALTO, COQUIMBO 346",
-            "PUENTE ALTO, COQUIMBO 1951",
-            "PUENTE ALTO, EL HUALLE 2393",
-            "PUENTE ALTO, EL TIMBAL 01753 PU",
-            "PUENTE ALTO, GENARO PRIETO 1035",
-            "PUENTE ALTO, JARDIN ALTO 1881 1881 VILLA ARCO IRIS",
-            "PUENTE ALTO, LEONARDO DA VINCI 992 CASA",
-            "PUENTE ALTO, LOS SICOMOROS 2328",
-            "PUENTE ALTO, NONATO COO 2466",
-            "PUENTE ALTO, PJE. SARMIENTO 0549 VILLA LA PRIMAVERA",
-            "PUENTE ALTO, TENIENTE BELLO 414 LUIS MATTE",
-            "PUENTE ALTO, TOME 646 DPTO 23",
-            "PUENTE ALTO, TOSCANINI 01461 DPTO 36",
-            "PUENTE ALTO, TRENTO SUR 428 CASA",
-            "PUENTE ALTO, VERDE 1843",
-            "SAN JOAQUIN, SEBASTOPOL 324 CASA",
-            "SAN RAMON, ELIAS FERNANDEZ ALBANO 8163 8163 8163",
-            "SAN RAMON, EMILIANO FIGUEROA 8530",
-            "SAN RAMON, LO CANAS 8522 CASA",
-            "SAN RAMON, VOLCAN 8595 CASA",
-            "LA GRANJA, AV. CARDENAL RAUL SILVA HENRIQUEZ 9251 9251 9251",
-          ]
-
-          const newDeliveries = addresses.map((address, index) => {
-            const commune = extractCommune(address)
-            return {
-              id: index + 1,
-              address,
-              commune,
-              status: index < 3 ? "completed" : "pending",
-              position: { top: "0%", left: "0%" }, // Posición temporal
-              distance: Math.round((Math.random() * 5 + 1) * 10) / 10, // Distancia aleatoria entre 1 y 6 km
-              estimatedTime: `${Math.floor(Math.random() * 15 + 5)}min`, // Tiempo aleatorio entre 5 y 20 min
-            }
-          })
-
-          // Actualizar posiciones después de crear las entregas
-          newDeliveries.forEach((delivery, index) => {
-            delivery.position = generatePosition(index, addresses.length, delivery.commune, newDeliveries)
-          })
-
-          setDeliveries(newDeliveries)
-          setHasDirections(true)
-
-          // Calcular estadísticas de la ruta
-          const totalDistance = newDeliveries.reduce((sum, delivery) => sum + (delivery.distance || 0), 0)
-          const totalMinutes = newDeliveries.reduce((sum, delivery) => {
-            const timeStr = delivery.estimatedTime || "0min"
-            const minutes = Number.parseInt(timeStr.replace("min", ""))
-            return sum + minutes
-          }, 0)
-
-          const hours = Math.floor(totalMinutes / 60)
-          const minutes = totalMinutes % 60
-
-          setRouteStats({
-            totalDistance: Math.round(totalDistance * 10) / 10,
-            totalTime: `${hours}h ${minutes}min`,
-            totalPoints: newDeliveries.length,
-            completedPoints: newDeliveries.filter((d) => d.status === "completed").length,
-            pendingPoints: newDeliveries.filter((d) => d.status === "pending").length,
-            optimizationType: "Sin optimizar",
-          })
-
-          setIsProcessingData(false)
-        } catch (error) {
-          console.error("Error processing data:", error)
-          setIsProcessingData(false)
-        }
-      }, 2000)
+        setIsProcessingData(false)
+      }, 500)
     }
   }, [importedData])
 
   // Actualizar cuando cambian las entregas externas
   useEffect(() => {
-    if (externalDeliveries.length > 0 && !importedData) {
+    if (externalDeliveries.length > 0) {
       setDeliveries(externalDeliveries)
       setHasDirections(true)
 
@@ -274,7 +197,7 @@ export function MapContainer({
         optimizationType: optimizationConfig?.type === "manual" ? "Orden manual" : "Sin optimizar",
       })
     }
-  }, [externalDeliveries, importedData, optimizationConfig])
+  }, [externalDeliveries, optimizationConfig])
 
   // Optimizar la ruta cuando cambia la configuración de optimización
   useEffect(() => {
@@ -358,6 +281,7 @@ export function MapContainer({
               index,
               optimizedDeliveries.length,
               delivery.commune,
+              optimizedDeliveries,
               type,
               returnToDepot,
               communeWeighting,
